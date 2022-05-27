@@ -1,4 +1,5 @@
-# ra_service
+# Registration Authority Service
+
 Simple Registration Authority microservice
 
 # Setup
@@ -14,6 +15,7 @@ Create requirements.txt
 
 ```
 fastapi
+pydantic
 ```
 
 ```

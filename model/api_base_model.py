@@ -1,20 +1,21 @@
 from pydantic import BaseModel
 from uuid import uuid4
-from deta import Deta
+from store.store import Store
 
 class ApiBaseModel(BaseModel):
 
-  def __init__(self):
-    deta = Deta()
-    self.db = deta.Base("ra_service")
-
   def save(self):
-    self.uuid = uuid4() 
-    self.db.put(self.json(), self.uuid) 
+    store = Store(self.__class__.__name__)
+    self.uuid = "%s" % (uuid4())
+    store.put(self.json(), self.uuid) 
     return self.uuid
 
   @classmethod
   def read(cls, uuid):
-    json = cls.db.get(uuid) 
-    return json # cls()
-    
+    return Store(cls.__name__).get(uuid) 
+
+  @classmethod
+  def list(cls):
+    return Store(cls.__name__).list()
+
+

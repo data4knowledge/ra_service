@@ -6,4 +6,3 @@ class Namespace(ApiBaseModel):
   uri: Union[str, None] = None
   name: str
   authority: str
-
