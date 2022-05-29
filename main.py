@@ -1,7 +1,7 @@
 from argparse import Namespace
 from fastapi import FastAPI
 from model.namespace import Namespace
-from deta import Deta
+from model.registration_authority import RegistrationAuthority
 
 VERSION = "0.1"
 SYSTEM_NAME = "d4k Registration Authority Microservice"
@@ -24,3 +24,8 @@ def read_namespace(uuid: str):
 @app.get("/namespace")
 def list_namespace():
   return Namespace.list()
+
+@app.post("/registration_authority")
+async def create_registration_authority(authority: RegistrationAuthority):
+  authority.save()
+  return authority.uuid
