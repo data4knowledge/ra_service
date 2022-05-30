@@ -12,7 +12,7 @@ def test_add_namespace_ok():
     response = client.post("/namespace", json=body)
     assert response.status_code == 200
 
-def test_add_namespace_ok():
+def test_add_namespace_error_1():
     body = {
         "name": "123",
     }
@@ -25,5 +25,21 @@ def test_add_namespace_ok():
             'type': 'value_error.missing'
         }]
     }
+
+def test_add_namespace_error_2():
+    body = {
+        "authority": "123",
+    }
+    response = client.post("/namespace", json=body)
+    assert response.status_code == 422
+    assert response.json() == {
+        'detail': [{
+            'loc': ['body', 'name'],
+            'msg': 'field required',
+            'type': 'value_error.missing'
+        }]
+    }
+
+
 
 
