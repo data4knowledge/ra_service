@@ -2,7 +2,7 @@ from argparse import Namespace
 from fastapi import FastAPI
 from model.namespace import Namespace
 from model.registration_authority import RegistrationAuthority
-
+ 
 VERSION = "0.1"
 SYSTEM_NAME = "d4k Registration Authority Microservice"
 
