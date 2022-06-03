@@ -1,10 +1,9 @@
 import pytest
-from model.namespace import Namespace
+from model.namespace import *
 
 def test_namespace():
     params = {'name': 'Jack', 'authority': 'xxx'}
-    ns = Namespace(**params)
+    ns = NamespacePost(**params)
     assert ns.name == "Jack"
     assert ns.authority == "xxx"
-    assert ns.uuid == None
 

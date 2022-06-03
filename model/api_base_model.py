@@ -6,9 +6,9 @@ class ApiBaseModel(BaseModel):
 
   def save(self):
     store = Store(self.__class__.__name__)
-    self.uuid = "%s" % (uuid4())
-    store.put(self.json(), self.uuid) 
-    return self.uuid
+    uuid = str(uuid4())
+    store.put(self.json(), uuid) 
+    return uuid
 
   @classmethod
   def read(cls, uuid):
