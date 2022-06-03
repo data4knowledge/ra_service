@@ -1,10 +1,11 @@
 from deta import Deta
 import json
+import os
 
 class Store():
     
   def __init__(self, klass):
-    self.__deta = Deta("a0c4l6ln_tmpSot6FfbwWzCQr7jTT8qSApEh5ASQS")
+    self.__deta = Deta(os.environ['RA_SERVICE_PROJ_KEY'])
     self.__store = self.__deta.Base("ra_service.%s" % (klass))
     
   def put(self, data, key):
