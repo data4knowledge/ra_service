@@ -6,7 +6,7 @@ from .dun import DUN
 from .company import Company
 from uuid import UUID
 
-class RegistrationAuthorityPost(ApiBaseModel):
+class RegistrationAuthorityIn(ApiBaseModel):
   name: str
   namespace: UUID
   dun: Union[DUN, None]
@@ -14,11 +14,5 @@ class RegistrationAuthorityPost(ApiBaseModel):
   grid: Union[GRID, None]
   company: Union[Company, None]
 
-class RegistrationAuthorityGet(ApiBaseModel):
+class RegistrationAuthorityOut(RegistrationAuthorityIn):
   uuid: UUID
-  name: str
-  namespace: UUID
-  dun: Union[DUN, None]
-  ror: Union[ROR, None]
-  grid: Union[GRID, None]
-  company: Union[Company, None]

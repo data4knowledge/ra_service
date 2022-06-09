@@ -1,5 +1,5 @@
-from argparse import Namespace
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, HTTPException
+from model.configuration import *
 from model.namespace import *
 from model.registration_authority import *
 from uuid import UUID
@@ -11,29 +11,47 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-  return {"Version":VERSION, "System": SYSTEM_NAME}
+  return { "system": SYSTEM_NAME, "version": VERSION }
+
+@app.post("/configuration")
+async def create_configuration(config: Configuration):
+  return config.save()
 
 @app.post("/namespace")
-async def create_namespace(namespace: NamespacePost):
+async def create_namespace(namespace: NamespaceIn):
   return namespace.save()
 
 @app.get("/namespace/{uuid}")
 def read_namespace(uuid: UUID):
-  return NamespaceGet.read(uuid)
+  return NamespaceOut.read(uuid)
 
 @app.get("/namespace")
 def list_namespace():
-  return NamespaceGet.list()
+  return NamespaceOut.list()
 
 @app.post("/registration_authority")
-async def create_registration_authority(authority: RegistrationAuthorityPost):
+async def create_registration_authority(authority: RegistrationAuthorityIn):
   return authority.save()
 
 @app.get("/registration_authority/{uuid}")
 def read_registration_authority(uuid: UUID):
-  return RegistrationAuthorityGet.read(uuid)
+  return RegistrationAuthorityOut.read(uuid)
 
 @app.get("/registration_authority")
 def list_registration_authority():
-  return RegistrationAuthorityGet.list()
+  return RegistrationAuthorityOut.list()
 
+@app.api_route("/{path_name:path}", methods=["GET"])
+async def resource(request: Request, path_name: str):
+    print("PATH:", path_name, flush=True)
+    # uri = PropertyUri(f'http://www.data4knowledge.dk/{path_name}')
+    # klass = Model.klass_for_uri(uri)
+    # print(f"Klass {klass}", flush=True)
+    # if klass == None:
+    #     raise HTTPException(status_code=404, detail="URI not found")
+    # object = eval(klass).find(uri)
+    # print(f"Object {object}", flush=True)
+    # if object == None:
+    #     raise HTTPException(status_code=404, detail="URI not found")
+    # else:
+    #     return {"type": object.__str__()}

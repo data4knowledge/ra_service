@@ -5,6 +5,14 @@ from uuid import uuid4
 
 client = TestClient(app)
 
+def test_configuration_ok():
+  body = {
+      "base_uri": "http://www.example.com",
+      "server_url": "http://www.example.com"
+  }
+  response = client.post("/configuration", json=body)
+  assert response.status_code == 200
+
 def test_add_namespace_ok():
   body = {
       "name": "123",

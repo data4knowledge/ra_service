@@ -2,11 +2,9 @@ from typing import List, Union
 from .api_base_model import ApiBaseModel
 from uuid import UUID
 
-class NamespacePost(ApiBaseModel):
+class NamespaceIn(ApiBaseModel):
   name: str
   authority: str
 
-class NamespaceGet(ApiBaseModel):
+class NamespaceOut(NamespaceIn):
   uuid: UUID
-  name: str
-  authority: str
