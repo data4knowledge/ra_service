@@ -3,7 +3,7 @@ from model.registration_authority import *
 from uuid import uuid4
 
 def test_registration_authority_ror():
-  uuid = uuid4()
+  uuid = str(uuid4())
   params = { 'name': 'Jack', 'namespace': uuid, 'ror': {'identifier': 'xxx'} }
   item = RegistrationAuthorityIn(**params)
   assert item.name == "Jack"
@@ -14,7 +14,7 @@ def test_registration_authority_ror():
   assert item.dun == None
 
 def test_registration_authorit_dun():
-  uuid = uuid4()
+  uuid = str(uuid4())
   params = { 'name': 'Jack', 'namespace':  uuid, 'dun': {'identifier': '123456789'} }
   item = RegistrationAuthorityIn(**params)
   assert item.name == "Jack"
@@ -25,7 +25,7 @@ def test_registration_authorit_dun():
   assert item.grid == None
 
 def test_registration_authorit_grid():
-  uuid = uuid4()
+  uuid = str(uuid4())
   params = { 'name': 'Jack', 'namespace':  uuid, 'grid': {'identifier': 'xxx'} }
   item = RegistrationAuthorityIn(**params)
   assert item.name == "Jack"
@@ -36,7 +36,7 @@ def test_registration_authorit_grid():
   assert item.dun == None
 
 def test_registration_authorit_company():
-  uuid = uuid4()
+  uuid = str(uuid4())
   params = { 'name': 'Jack', 'namespace':  uuid, 'company': {'identifier': 'xxx', 'country_code': 'GBR'} }
   item = RegistrationAuthorityIn(**params)
   assert item.name == "Jack"
@@ -47,13 +47,13 @@ def test_registration_authorit_company():
   assert item.dun == None
 
 def test_registration_authorit_company_error():
-  uuid = uuid4()
-  params = { 'name': 'Jack', 'namespace':  uuid, 'company': {'identifier': 'xxx', 'country_code': 'GB'} }
+  uuid = str(uuid4())
+  params = { 'name': 'Jack', 'namespace': uuid, 'company': {'identifier': 'xxx', 'country_code': 'GB'} }
   with pytest.raises(ValueError):
     item = RegistrationAuthorityIn(**params)
 
 def test_registration_authorit_dun_error():
-  uuid = uuid4()
-  params = { 'name': 'Jack', 'namespace':  uuid, 'dun': {'identifier': '12345678'} }
+  uuid = str(uuid4())
+  params = { 'name': 'Jack', 'namespace': uuid, 'dun': {'identifier': '12345678'} }
   with pytest.raises(ValueError):
     item = RegistrationAuthorityIn(**params)

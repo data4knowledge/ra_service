@@ -2,6 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 from main import app
 from uuid import uuid4
+import os
 
 client = TestClient(app)
 
@@ -31,7 +32,7 @@ def test_namespace_roundtrip():
   uuid = response.json()
   response = client.get("/namespace/%s" % (uuid))
   assert response.status_code == 200
-  assert response.json() == { 'authority': 'xxx', 'name': '123', 'uuid': uuid }
+  assert response.json() == { 'authority': 'xxx', 'name': '123', 'uuid': uuid, 'uri': "%sns/%s" % (os.environ["RA_SERVICE_BASE_URI"], uuid) }
   
 def test_add_namespace_error_1():
   body = {
@@ -90,7 +91,8 @@ def test_ra_roundtrip():
   response = client.get("/registration_authority/%s" % (uuid))
   assert response.status_code == 200
   assert response.json() == { 'uuid': uuid, 'name': 'Jack', 'namespace': namespace_uuid, 
-    'ror': {'identifier': '12345678'}, 'company': None, 'dun': None, 'grid': None 
+    'ror': {'identifier': '12345678'}, 'company': None, 'dun': None, 'grid': None,
+    'uri': "%sra/%s" % (os.environ["RA_SERVICE_BASE_URI"], uuid)
   }
 
 def test_add_ra_error_1():

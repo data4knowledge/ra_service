@@ -14,9 +14,10 @@ class Store():
   def get(self, key):
     print("KEY", key)
     print("DATA", self.__store.get(key))
-    data = json.loads(self.__store.get(key)["value"])
-    data.pop('key', None)
-    data["uuid"] = key
+    #data = json.loads(self.__store.get(key)["value"])
+    data = self.__store.get(key)["value"]
+    #data.pop('key', None)
+    #data["uuid"] = key
     return data
 
   def list(self, klass):

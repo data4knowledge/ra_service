@@ -1,4 +1,3 @@
-from typing import List, Union
 from pydantic import validator
 from .api_base_model import ApiBaseModel
 

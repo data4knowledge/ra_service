@@ -15,11 +15,11 @@ def read_root():
 
 @app.post("/configuration")
 async def create_configuration(config: Configuration):
-  return config.save()
+  return config.save_and_response
 
 @app.post("/namespace")
 async def create_namespace(namespace: NamespaceIn):
-  return namespace.save()
+  return NamespaceOut.save_and_response(namespace) 
 
 @app.get("/namespace/{uuid}")
 def read_namespace(uuid: UUID):
@@ -31,7 +31,7 @@ def list_namespace():
 
 @app.post("/registration_authority")
 async def create_registration_authority(authority: RegistrationAuthorityIn):
-  return authority.save()
+  return RegistrationAuthorityOut.save_and_response(authority) 
 
 @app.get("/registration_authority/{uuid}")
 def read_registration_authority(uuid: UUID):

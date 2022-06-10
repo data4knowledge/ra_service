@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from fastapi.encoders import jsonable_encoder
 from uuid import uuid4
 from store.store import Store
 
@@ -6,9 +7,8 @@ class ApiBaseModel(BaseModel):
   
   def save(self):
     store = Store()
-    uuid = str(uuid4())
-    store.put(self.json(), self.__class__.__name__, uuid) 
-    return uuid
+    store.put(jsonable_encoder(self), self.__class__.__name__, self.uuid) 
+    return self.uuid
 
   @classmethod
   def read(cls, uuid):
@@ -16,6 +16,6 @@ class ApiBaseModel(BaseModel):
 
   @classmethod
   def list(cls):
-    return Store(cls.__name__).list()
+    return Store().list(cls)
 
 
