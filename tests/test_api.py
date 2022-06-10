@@ -12,7 +12,7 @@ def test_configuration_ok():
   }
   response = client.post("/configuration", json=body)
   assert response.status_code == 200
-
+  
 def test_add_namespace_ok():
   body = {
       "name": "123",
@@ -20,7 +20,19 @@ def test_add_namespace_ok():
   }
   response = client.post("/namespace", json=body)
   assert response.status_code == 200
-
+  
+def test_namespace_roundtrip():
+  body = {
+      "name": "123",
+      "authority": "xxx",
+  }
+  response = client.post("/namespace", json=body)
+  assert response.status_code == 200
+  uuid = response.json()
+  response = client.get("/namespace/%s" % (uuid))
+  assert response.status_code == 200
+  assert response.json() == { 'authority': 'xxx', 'name': '123', 'uuid': uuid }
+  
 def test_add_namespace_error_1():
   body = {
       "name": "123",
@@ -68,6 +80,18 @@ def test_add_ra_ok_4():
   body = { 'name': 'Jack', 'namespace': str(uuid4()), 'ror': {'identifier': '12345678'} }
   response = client.post("/registration_authority", json=body)
   assert response.status_code == 200
+
+def test_ra_roundtrip():
+  namespace_uuid = str(uuid4())
+  body = { 'name': 'Jack', 'namespace': namespace_uuid, 'ror': {'identifier': '12345678'} }
+  response = client.post("/registration_authority", json=body)
+  assert response.status_code == 200
+  uuid = response.json()
+  response = client.get("/registration_authority/%s" % (uuid))
+  assert response.status_code == 200
+  assert response.json() == { 'uuid': uuid, 'name': 'Jack', 'namespace': namespace_uuid, 
+    'ror': {'identifier': '12345678'}, 'company': None, 'dun': None, 'grid': None 
+  }
 
 def test_add_ra_error_1():
   body = { 'name': 'Jack', 'namespace': str(uuid4()), 'company': {'identifier': 'xxx', 'country_code': 'G'} }
