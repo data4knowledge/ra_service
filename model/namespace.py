@@ -16,8 +16,9 @@ class NamespaceOut(NamespaceIn):
     dict['uuid'] = str(uuid4())
     dict['uri'] = cls.generate_uri(dict['uuid'])
     result = NamespaceOut.parse_obj(dict) 
-    return result.save()
+    uuid = result.save()
+    return { 'uuid': result.uuid, 'uri': result.uri }
 
   @classmethod
   def generate_uri(cls, uuid):
-    return "%sns/%s" % (os.environ["RA_SERVICE_BASE_URI"], uuid)
+    return "%sdataset/ns/%s" % (os.environ["RA_SERVICE_BASE_URI"], uuid)

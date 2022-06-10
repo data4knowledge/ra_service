@@ -25,10 +25,11 @@ class RegistrationAuthorityOut(RegistrationAuthorityIn):
     dict['uuid'] = str(uuid4())
     dict['uri'] = cls.generate_uri(dict['uuid'])
     result = RegistrationAuthorityOut.parse_obj(dict) 
-    return result.save()
+    uuid = result.save()
+    return { 'uuid': result.uuid, 'uri': result.uri }
 
   @classmethod
   def generate_uri(cls, uuid):
-    return "%sra/%s" % (os.environ["RA_SERVICE_BASE_URI"], uuid)
+    return "%sdataset/ra/%s" % (os.environ["RA_SERVICE_BASE_URI"], uuid)
 
 

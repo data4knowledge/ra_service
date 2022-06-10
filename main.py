@@ -3,6 +3,7 @@ from model.configuration import *
 from model.namespace import *
 from model.registration_authority import *
 from uuid import UUID
+import os
 
 VERSION = "0.1"
 SYSTEM_NAME = "d4k Registration Authority Microservice"
@@ -44,14 +45,10 @@ def list_registration_authority():
 @app.api_route("/{path_name:path}", methods=["GET"])
 async def resource(request: Request, path_name: str):
     print("PATH:", path_name, flush=True)
-    # uri = PropertyUri(f'http://www.data4knowledge.dk/{path_name}')
-    # klass = Model.klass_for_uri(uri)
-    # print(f"Klass {klass}", flush=True)
-    # if klass == None:
-    #     raise HTTPException(status_code=404, detail="URI not found")
-    # object = eval(klass).find(uri)
-    # print(f"Object {object}", flush=True)
-    # if object == None:
-    #     raise HTTPException(status_code=404, detail="URI not found")
-    # else:
-    #     return {"type": object.__str__()}
+    uri = "%s%s" % (os.environ["RA_SERVICE_BASE_URI"], path_name)
+    print("URI:", uri, flush=True)
+    item = ApiBaseModel.read_by_uri(uri)
+    if item == None:
+      raise HTTPException(status_code=404, detail="URI not found")
+    else:
+      return item

@@ -29,10 +29,11 @@ def test_namespace_roundtrip():
   }
   response = client.post("/namespace", json=body)
   assert response.status_code == 200
-  uuid = response.json()
+  uuid = response.json()['uuid']
   response = client.get("/namespace/%s" % (uuid))
   assert response.status_code == 200
-  assert response.json() == { 'authority': 'xxx', 'name': '123', 'uuid': uuid, 'uri': "%sns/%s" % (os.environ["RA_SERVICE_BASE_URI"], uuid) }
+  assert response.json() == { 'authority': 'xxx', 'name': '123', 'uuid': uuid, 
+    'uri': "%sdataset/ns/%s" % (os.environ["RA_SERVICE_BASE_URI"], uuid) }
   
 def test_add_namespace_error_1():
   body = {
@@ -87,12 +88,26 @@ def test_ra_roundtrip():
   body = { 'name': 'Jack', 'namespace': namespace_uuid, 'ror': {'identifier': '12345678'} }
   response = client.post("/registration_authority", json=body)
   assert response.status_code == 200
-  uuid = response.json()
+  uuid = response.json()['uuid']
   response = client.get("/registration_authority/%s" % (uuid))
   assert response.status_code == 200
   assert response.json() == { 'uuid': uuid, 'name': 'Jack', 'namespace': namespace_uuid, 
     'ror': {'identifier': '12345678'}, 'company': None, 'dun': None, 'grid': None,
-    'uri': "%sra/%s" % (os.environ["RA_SERVICE_BASE_URI"], uuid)
+    'uri': "%sdataset/ra/%s" % (os.environ["RA_SERVICE_BASE_URI"], uuid)
+  }
+
+def test_ra_uri_roundtrip():
+  namespace_uuid = str(uuid4())
+  body = { 'name': 'Jack', 'namespace': namespace_uuid, 'ror': {'identifier': '12345678'} }
+  response = client.post("/registration_authority", json=body)
+  assert response.status_code == 200
+  uuid = response.json()['uuid']
+  uri = response.json()['uri']
+  response = client.get(uri)
+  assert response.status_code == 200
+  assert response.json() == { 'uuid': uuid, 'name': 'Jack', 'namespace': namespace_uuid, 
+    'ror': {'identifier': '12345678'}, 'company': None, 'dun': None, 'grid': None,
+    'uri': "%sdataset/ra/%s" % (os.environ["RA_SERVICE_BASE_URI"], uuid)
   }
 
 def test_add_ra_error_1():

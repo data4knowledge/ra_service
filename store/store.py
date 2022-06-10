@@ -8,17 +8,18 @@ class Store():
     self.__deta = Deta(os.environ['RA_SERVICE_PROJ_KEY'])
     self.__store = self.__deta.Base("ra_service")
     
-  def put(self, data, klass, key):
-    self.__store.put({ 'value': data, 'klass': klass }, key)
+  def put(self, data, klass, uri, key):
+    self.__store.put({ 'value': data, 'uri': uri, 'klass': klass }, key)
 
   def get(self, key):
-    print("KEY", key)
-    print("DATA", self.__store.get(key))
-    #data = json.loads(self.__store.get(key)["value"])
     data = self.__store.get(key)["value"]
-    #data.pop('key', None)
-    #data["uuid"] = key
     return data
+
+  def get_by_uri(self, uri):
+    items = self.__store.fetch({ "uri": uri }).items
+    for v in items:
+      return v["value"]
+    return None
 
   def list(self, klass):
     results = []
